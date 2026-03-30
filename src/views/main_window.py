@@ -32,6 +32,7 @@ class MainWindow:
         self._on_file_selected_callback: Optional[Callable[[Path], None]] = None
         self._on_transcribe_callback: Optional[Callable[[], None]] = None
         self._on_export_callback: Optional[Callable[[Path], None]] = None
+        self.language_var = tk.StringVar(value=Config.DEFAULT_TRANSCRIPTION_LANGUAGE)
         
         self._setup_ui()
     
@@ -50,6 +51,20 @@ class MainWindow:
         
         self.btn_select = ttk.Button(top_frame, text="Seleccionar", width=15)
         self.btn_select.pack(side=tk.RIGHT, padx=5)
+
+        # Selector de idioma
+        language_frame = ttk.Frame(top_frame)
+        language_frame.pack(side=tk.RIGHT, padx=10)
+
+        ttk.Label(language_frame, text="Idioma:").pack(side=tk.LEFT, padx=(0, 5))
+        self.cmb_language = ttk.Combobox(
+            language_frame,
+            textvariable=self.language_var,
+            values=list(Config.TRANSCRIPTION_LANGUAGES.keys()),
+            state="readonly",
+            width=12,
+        )
+        self.cmb_language.pack(side=tk.LEFT)
         
         # Frame central - Transcripción
         center_frame = ttk.LabelFrame(self.root, text="Transcripción", padding=10)
@@ -133,6 +148,14 @@ class MainWindow:
     def get_transcription_text(self) -> str:
         """Obtiene el texto de la transcripción."""
         return self.text_transcription.get(1.0, tk.END).strip()
+
+    def get_selected_language_code(self) -> str:
+        """Obtiene el codigo de idioma seleccionado para transcribir."""
+        selected = self.language_var.get()
+        return Config.TRANSCRIPTION_LANGUAGES.get(
+            selected,
+            Config.TRANSCRIPTION_LANGUAGES[Config.DEFAULT_TRANSCRIPTION_LANGUAGE],
+        )
     
     def set_status(self, message: str) -> None:
         """Actualiza la barra de estado."""

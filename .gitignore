@@ -47,3 +47,10 @@ htmlcov/
 # Temporal
 *.tmp
 temp/
+
+# Audio local de pruebas
+*.mp3
+*.wav
+*.m4a
+*.flac
+*.ogg

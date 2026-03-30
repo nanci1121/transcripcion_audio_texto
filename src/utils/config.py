@@ -26,6 +26,14 @@ class Config:
     # Parámetros de transcripción
     SUPPORTED_FORMATS: tuple = (".mp3", ".wav", ".m4a", ".flac", ".ogg")
     MAX_FILE_SIZE_MB: int = 500
+    TRANSCRIPTION_CHUNK_SECONDS: int = 25
+    TRANSCRIPTION_LANGUAGES: Dict[str, str] = {
+        "Espanol": "es-ES",
+        "Catalan": "ca-ES",
+        "Ingles": "en-US",
+        "Chino tradicional": "zh-TW",
+    }
+    DEFAULT_TRANSCRIPTION_LANGUAGE: str = "Catalan"
     
     # Parámetros de UI
     THEME: str = "clam"

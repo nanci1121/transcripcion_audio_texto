@@ -32,7 +32,9 @@ class AppController:
         """
         self.view = view
         self.current_task: Optional[TranscriptionTask] = None
-        self.transcription_service = TranscriptionService()
+        self.transcription_service = TranscriptionService(
+            chunk_duration_seconds=Config.TRANSCRIPTION_CHUNK_SECONDS,
+        )
         self._connect_signals()
         Config.create_directories()
     
@@ -123,7 +125,20 @@ class AppController:
         if self.current_task is None:
             raise ValueError("No existe una tarea de transcripción activa.")
 
-        return self.transcription_service.transcribe(self.current_task.audio_path)
+        language_code = self.view.get_selected_language_code()
+
+        return self.transcription_service.transcribe(
+            self.current_task.audio_path,
+            language=language_code,
+            on_progress=self._on_transcription_progress,
+        )
+
+    def _on_transcription_progress(self, current_chunk: int, total_chunks: int) -> None:
+        """Actualiza la UI con el progreso por bloques de transcripción."""
+        percent = int((current_chunk / total_chunks) * 100)
+        self.view.set_status(
+            f"Transcribiendo... bloque {current_chunk}/{total_chunks} ({percent}%)"
+        )
     
     def on_export(self, file_path: Path) -> None:
         """
