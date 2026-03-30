@@ -54,3 +54,5 @@ temp/
 *.m4a
 *.flac
 *.ogg
+# Regla de github
+safety rule.json
