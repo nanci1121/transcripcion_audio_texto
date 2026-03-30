@@ -27,6 +27,16 @@ class Config:
     SUPPORTED_FORMATS: tuple = (".mp3", ".wav", ".m4a", ".flac", ".ogg")
     MAX_FILE_SIZE_MB: int = 500
     TRANSCRIPTION_CHUNK_SECONDS: int = 25
+    TRANSCRIPTION_CHUNK_OVERLAP_SECONDS: int = 2
+    TRANSCRIPTION_ENGINE: str = "whisper_local"
+    TRANSCRIPTION_ENGINES: Dict[str, str] = {
+        "Whisper local (offline)": "whisper_local",
+        "Google (requiere internet)": "google_cloud",
+    }
+    WHISPER_MODEL_SIZE: str = "small"
+    WHISPER_COMPUTE_TYPE: str = "int8"
+    INCLUDE_TIMESTAMPS_BY_DEFAULT: bool = True
+    PREVIEW_CLIP_SECONDS: int = 60
     TRANSCRIPTION_LANGUAGES: Dict[str, str] = {
         "Espanol": "es-ES",
         "Catalan": "ca-ES",

@@ -38,6 +38,7 @@ APIs, bases de datos, lógica de servidor.
 - ✓ Escribiendo tests unitarios de servicios
 
 ### Activación
+- **Automática**: Al trabajar en `src/services/**/*.py`, `src/models/**/*.py`, `src/controllers/**/*.py`, `src/utils/**/*.py` (via `.github/instructions/backend.instructions.md`)
 - **Manual**: "*Usa el agente BackendDeveloper*" o "*Backend*"
 
 ### Proporciona
@@ -68,6 +69,7 @@ Interfaces gráficas, componentes, gestión de estado.
 - ✓ Optimizando responsividad
 
 ### Activación
+- **Automática**: Al trabajar en `src/views/**/*.py` (via `.github/instructions/frontend.instructions.md`)
 - **Manual**: "*Usa el agente FrontendDeveloper*" o "*Frontend*"
 
 ### Proporciona
@@ -98,6 +100,7 @@ Wireframes, prototipos, experiencia de usuario.
 - ✓ Validando contraste y tamaño de elementos
 
 ### Activación
+- **Automática**: Al trabajar en `src/views/**/*.py` y `README.md` (via `.github/instructions/ux.instructions.md`)
 - **Manual**: "*Usa el agente UXDesigner*" o "*UX*" o "*Diseño*"
 
 ### Proporciona
@@ -128,6 +131,7 @@ Testing, validación, aseguramiento de calidad.
 - ✓ Validando requisitos
 
 ### Activación
+- **Automática**: Al trabajar en `tests/**/*.py` (via `.github/instructions/qa.instructions.md`)
 - **Manual**: "*Usa el agente QAEngineer*" o "*Testing*" o "*QA*"
 
 ### Proporciona
@@ -158,6 +162,7 @@ Gestión ágil, planificación, sprint.
 - ✓ Facilitando standups y retrospectives
 
 ### Activación
+- **Automática**: Al trabajar en `README.md`, `AGENTS.md`, `.github/**/*.md` (via `.github/instructions/project-management.instructions.md`)
 - **Manual**: "*Usa el agente ProjectManager*" o "*PM*" o "*Scrum*"
 
 ### Proporciona
