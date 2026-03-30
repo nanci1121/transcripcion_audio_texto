@@ -7,6 +7,7 @@ applyTo: src/**/*.py
 ## Activación Automática
 
 Este archivo activa el agente **WindowsDesktopApp** automáticamente cuando trabajas con archivos Python en `src/`.
+Adicionalmente, el proyecto usa instrucciones por dominio en `.github/instructions/*.instructions.md` para reforzar comportamiento especifico de Backend, Frontend, UX, QA y Project Management segun la ruta del archivo.
 
 ## 🎯 Contexto del Proyecto
 
