@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Optional
 
 from src.models.transcription import TranscriptionTask
+from src.services.transcription_service import TranscriptionService
 from src.views.main_window import MainWindow
 from src.utils.config import Config
 from src.utils.validators import Validators
@@ -26,6 +27,7 @@ class AppController:
         """
         self.view = view
         self.current_task: Optional[TranscriptionTask] = None
+        self.transcription_service = TranscriptionService()
         self._connect_signals()
         Config.create_directories()
     
@@ -100,8 +102,10 @@ class AppController:
         Raises:
             Exception: Si ocurre un error en la transcripción
         """
-        # Placeholder - Implementar con tu servicio de transcripción
-        return "Texto de prueba de transcripción.\n\nEsta es una transcripción simulada."
+        if self.current_task is None:
+            raise ValueError("No existe una tarea de transcripción activa.")
+
+        return self.transcription_service.transcribe(self.current_task.audio_path)
     
     def on_export(self, file_path: Path) -> None:
         """
