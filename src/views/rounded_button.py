@@ -121,17 +121,10 @@ class RoundedButton(tk.Canvas):
 
     def _bind_events(self) -> None:
         """Registra los eventos del ratón."""
-        for widget in (self,):
-            widget.bind("<Enter>", self._on_enter)
-            widget.bind("<Leave>", self._on_leave)
-            widget.bind("<ButtonPress-1>", self._on_press)
-            widget.bind("<ButtonRelease-1>", self._on_release)
-
-        # Propagar eventos desde el texto al Canvas
-        self.tag_bind("all", "<Enter>", self._on_enter)
-        self.tag_bind("all", "<Leave>", self._on_leave)
-        self.tag_bind("all", "<ButtonPress-1>", self._on_press)
-        self.tag_bind("all", "<ButtonRelease-1>", self._on_release)
+        self.bind("<Enter>", self._on_enter)
+        self.bind("<Leave>", self._on_leave)
+        self.bind("<Button-1>", self._on_button_pressed)
+        self.bind("<ButtonRelease-1>", self._on_release)
 
     def _on_enter(self, _event: object = None) -> None:
         if not self._pressed and not self._disabled:
@@ -141,7 +134,7 @@ class RoundedButton(tk.Canvas):
         self._pressed = False
         self._draw(self._colors["bg"])
 
-    def _on_press(self, _event: object = None) -> None:
+    def _on_button_pressed(self, _event: object = None) -> None:
         if self._disabled:
             return
         self._pressed = True

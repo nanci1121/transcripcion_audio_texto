@@ -206,16 +206,14 @@ class AppController:
     def _on_transcription_progress(self, current_chunk: int, total_chunks: int) -> None:
         """Actualiza la UI con el progreso por bloques de transcripción."""
         percent = int((current_chunk / total_chunks) * 100)
-        self.view.set_status(
-            f"Transcribiendo... bloque {current_chunk}/{total_chunks} ({percent}%)"
-        )
+        status_msg = f"Transcribiendo... bloque {current_chunk}/{total_chunks} ({percent}%)"
+        self.view.root.after(0, lambda msg=status_msg: self.view.set_status(msg))
 
     def _on_preview_progress(self, current_chunk: int, total_chunks: int) -> None:
         """Actualiza la UI con el progreso del clip de prueba."""
         percent = int((current_chunk / total_chunks) * 100)
-        self.view.set_status(
-            f"Probando 60s... bloque {current_chunk}/{total_chunks} ({percent}%)"
-        )
+        status_msg = f"Probando 60s... bloque {current_chunk}/{total_chunks} ({percent}%)"
+        self.view.root.after(0, lambda msg=status_msg: self.view.set_status(msg))
 
     def _create_transcription_service(self, engine: str) -> TranscriptionService:
         """Construye el servicio de transcripción con el motor indicado."""
