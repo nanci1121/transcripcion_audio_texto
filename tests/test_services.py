@@ -37,6 +37,14 @@ def test_transcription_service_raises_when_file_missing() -> None:
         service.transcribe(Path("no_existe.wav"))
 
 
+def test_transcription_service_configures_audio_converter() -> None:
+    """Verifica que exista un convertidor configurado para pydub."""
+    service = TranscriptionService()
+
+    assert service is not None
+    assert getattr(service, "_configure_audio_converter") is not None
+
+
 def test_recognize_maps_unknown_value_error(monkeypatch: pytest.MonkeyPatch) -> None:
     """Verifica que UnknownValueError se traduzca a error de dominio."""
     service = TranscriptionService()

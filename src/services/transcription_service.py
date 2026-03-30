@@ -6,8 +6,10 @@ import tempfile
 from pathlib import Path
 from typing import Optional
 
+import imageio_ffmpeg
 import speech_recognition as sr
 from pydub import AudioSegment
+from pydub.utils import which
 
 
 class TranscriptionServiceError(Exception):
@@ -22,8 +24,16 @@ class TranscriptionEngineError(TranscriptionServiceError):
     """Error al comunicarse con el motor de transcripción."""
 
 
+class AudioConversionError(TranscriptionServiceError):
+    """Error al convertir audio por falta de herramientas o codecs."""
+
+
 class TranscriptionService:
     """Encapsula la lógica de transcripción de audio."""
+
+    def __init__(self) -> None:
+        """Configura herramientas externas necesarias para procesar audio."""
+        self._configure_audio_converter()
 
     def transcribe(self, audio_path: Path, language: str = "es-ES") -> str:
         """
@@ -63,8 +73,8 @@ class TranscriptionService:
             AudioSegment.from_file(audio_path).export(temp_path, format="wav")
             return temp_path, temp_path
         except Exception as error:
-            raise AudioFormatError(
-                "No fue posible convertir el audio a WAV. Verifica formato y codec."
+            raise AudioConversionError(
+                "No fue posible convertir el audio a WAV. Verifica que ffmpeg esté disponible y que el archivo use un codec compatible."
             ) from error
 
     def _recognize(self, audio_path: Path, language: str) -> str:
@@ -91,3 +101,15 @@ class TranscriptionService:
         """Elimina archivo temporal si fue creado durante la conversión."""
         if temp_path and temp_path.exists():
             temp_path.unlink(missing_ok=True)
+
+    def _configure_audio_converter(self) -> None:
+        """Configura ffmpeg para pydub usando PATH o binario empaquetado por Python."""
+        converter_path = which("ffmpeg") or imageio_ffmpeg.get_ffmpeg_exe()
+        if not converter_path:
+            raise AudioConversionError(
+                "No se encontró ffmpeg. Instala ffmpeg o agrega imageio-ffmpeg a tu entorno."
+            )
+
+        AudioSegment.converter = converter_path
+        AudioSegment.ffmpeg = converter_path
+        AudioSegment.ffprobe = which("ffprobe") or converter_path

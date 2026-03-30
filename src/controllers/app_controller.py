@@ -6,7 +6,12 @@ from pathlib import Path
 from typing import Optional
 
 from src.models.transcription import TranscriptionTask
-from src.services.transcription_service import TranscriptionService
+from src.services.transcription_service import (
+    AudioConversionError,
+    TranscriptionEngineError,
+    TranscriptionService,
+    TranscriptionServiceError,
+)
 from src.views.main_window import MainWindow
 from src.utils.config import Config
 from src.utils.validators import Validators
@@ -80,17 +85,30 @@ class AppController:
         self.view.set_status("Transcribiendo...")
         
         try:
-            # TODO: Implementar la transcripción real
             transcript = self._perform_transcription()
             self.current_task.mark_completed(transcript)
             self.view.set_transcription_text(transcript)
             self.view.set_status("Transcripción completada ✓")
             self.view.show_info("Éxito", "Archivo transcrito correctamente.")
-        
-        except Exception as e:
-            self.current_task.mark_error(str(e))
-            self.view.show_error("Error en transcripción", str(e))
+        except AudioConversionError as error:
+            self.current_task.mark_error(str(error))
+            self.view.show_error(
+                "Error de conversión",
+                f"{error}\n\nInstala o configura ffmpeg para procesar MP3, M4A u otros formatos comprimidos."
+            )
+            self.view.set_status("Error de conversión de audio")
+        except TranscriptionEngineError as error:
+            self.current_task.mark_error(str(error))
+            self.view.show_error("Servicio no disponible", str(error))
+            self.view.set_status("Error del motor de transcripción")
+        except TranscriptionServiceError as error:
+            self.current_task.mark_error(str(error))
+            self.view.show_error("Error en transcripción", str(error))
             self.view.set_status("Error en transcripción")
+        except Exception as error:
+            self.current_task.mark_error(str(error))
+            self.view.show_error("Error inesperado", str(error))
+            self.view.set_status("Error inesperado")
     
     def _perform_transcription(self) -> str:
         """
