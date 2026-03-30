@@ -4,7 +4,12 @@ Punto de entrada de la aplicación.
 
 import tkinter as tk
 import sys
+import warnings
 from pathlib import Path
+
+# Suprimir warning inofensivo de pydub sobre ffmpeg en PATH
+# (la app usa imageio-ffmpeg, no el ffmpeg del sistema)
+warnings.filterwarnings("ignore", category=RuntimeWarning, module="pydub")
 
 # Agregar el directorio raíz al path para los imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
